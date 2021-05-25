@@ -1,10 +1,10 @@
 # Packet Reading
 
-## Listening
+So this document briefly covers the process which Apache will use to scan in a packet and process it.
 
-So this section covers how apache actually listens, and scans in a packet into memeory.
+So Apache has a function `ap_run_process_connection`, which will launch the corresponding functions for the protocol it is communicating with. For http, I see the function `ap_process_http_connection`, which calls `ap_process_http_async_connection`. The `ap_process_http_async_connection` is what will call the functions for scanning in the request, and processing it. The function responsible for scanning it in is `ap_read_request` which will return the request in a `request_rec` struct, which holds an http request.
 
-So there is a function called `apr_socket_recv`
+This is the callstack as seen from the function `apr_socket_recv`, which is executed as part of the process for scanning in a packet, in the `ap_read_request` function.
 
 ```
 #0  0x00007fa3da3774f0 in apr_socket_recv () from /lib/x86_64-linux-gnu/libapr-1.so.0
@@ -25,3 +25,6 @@ So there is a function called `apr_socket_recv`
 #15 0x00007fa3da33b609 in start_thread (arg=<optimized out>) at pthread_create.c:477
 #16 0x00007fa3da262293 in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:95
 ```
+
+We then see the function `ap_process_async_request` function is called on the received request, assuming all of the checks pass. Now this will primarily call the `ap_process_request_internal` function, which primarily handles the request. Now there isn't a ton to this function, however http at it's core is kind of just a fancy file server with some extra functionallities (granted apache has a ton of extra functionallity ontop of that).
+
