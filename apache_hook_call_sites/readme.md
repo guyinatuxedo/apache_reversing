@@ -1,20 +1,20 @@
 # Apache Module Hook Call Sites
 
-So this document will cover the different spots in Apache that will call function hooks from modules, since those are the points which module functionallity can actually execute from. In base apache, there are 13 different hook types, with thirteen different functions that can run those hook types:
+So this document will cover the different spots in Apache that will call function hooks from modules, since those are the points which module functionallity can actually execute from. In base apache, there are 13 different hook types, with thirteen different functions that can run those hook types. These are the hook types currently covered:
 
-*[ap_run_translate_name](#ap_run_translate_name)
-*[ap_run_map_to_storage](#ap_run_map_to_storage)
-*[ap_run_check_user_id](#ap_run_check_user_id)
-*[ap_run_fixups](#ap_run_fixups)
-*[ap_run_type_checker](#ap_run_type_checker)
-*[ap_run_access_checker](#ap_run_access_checker)
-*[ap_run_access_checker_ex](#ap_run_access_checker_ex)
-*[ap_run_auth_checker](#ap_run_auth_checker)
-*[ap_run_insert_filter](#ap_run_insert_filter)
-*[ap_run_create_request](#ap_run_create_request)
-*[ap_run_post_perdir_config](#ap_run_post_perdir_config)
-*[ap_run_dirwalk_stat](#ap_run_dirwalk_stat)
-*[ap_run_force_authn](#ap_run_force_authn)
+* [ap_run_translate_name](#ap_run_translate_name)
+* [ap_run_map_to_storage](#ap_run_map_to_storage)
+* [ap_run_check_user_id](#ap_run_check_user_id)
+* [ap_run_fixups](#ap_run_fixups)
+* [ap_run_type_checker](#ap_run_type_checker)
+* [ap_run_access_checker](#ap_run_access_checker)
+* [ap_run_access_checker_ex](#ap_run_access_checker_ex)
+* [ap_run_auth_checker](#ap_run_auth_checker)
+* [ap_run_insert_filter](#ap_run_insert_filter)
+* [ap_run_create_request](#ap_run_create_request)
+* [ap_run_post_perdir_config](#ap_run_post_perdir_config)
+* [ap_run_dirwalk_stat](#ap_run_dirwalk_stat)
+* [ap_run_force_authn](#ap_run_force_authn)
 
 
 Now the `ap_process_request_internal` function is where the majority of the hook call functions are from. Next we will list exactly where these functions which call module hooks, are called from.
