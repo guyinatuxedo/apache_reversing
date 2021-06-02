@@ -107,3 +107,40 @@ Now breaking this down, this function appears to do the following. First there i
 
 In the case I setup, what ends up happening is that is that all of the function calls, up to the second `try_alias_list` call return null. The `try_alias_list` function call returns the char pointer to the file mapped to the alias, which then the request has it's filename set to that. Looking at the `try_alias_list` function, we see that it effectively just iterates through the list of aliases it's been given, looking for an alias that matches the one in the request.
 
+## Commands
+
+So looking at the command list, we see there are `8` of them:
+```
+static const command_rec alias_cmds[] =
+{
+    AP_INIT_TAKE12("Alias", add_alias, NULL, RSRC_CONF | ACCESS_CONF,
+                  "a fakename and a realname, or a realname in a Location"),
+    AP_INIT_TAKE12("ScriptAlias", add_alias, "cgi-script", RSRC_CONF | ACCESS_CONF,
+                  "a fakename and a realname, or a realname in a Location"),
+    AP_INIT_TAKE123("Redirect", add_redirect, (void *) HTTP_MOVED_TEMPORARILY,
+                   OR_FILEINFO,
+                   "an optional status, then document to be redirected and "
+                   "destination URL"),
+    AP_INIT_TAKE2("AliasMatch", add_alias_regex, NULL, RSRC_CONF,
+                  "a regular expression and a filename"),
+    AP_INIT_TAKE2("ScriptAliasMatch", add_alias_regex, "cgi-script", RSRC_CONF,
+                  "a regular expression and a filename"),
+    AP_INIT_TAKE23("RedirectMatch", add_redirect_regex,
+                   (void *) HTTP_MOVED_TEMPORARILY, OR_FILEINFO,
+                   "an optional status, then a regular expression and "
+                   "destination URL"),
+    AP_INIT_TAKE2("RedirectTemp", add_redirect2,
+                  (void *) HTTP_MOVED_TEMPORARILY, OR_FILEINFO,
+                  "a document to be redirected, then the destination URL"),
+    AP_INIT_TAKE2("RedirectPermanent", add_redirect2,
+                  (void *) HTTP_MOVED_PERMANENTLY, OR_FILEINFO,
+                  "a document to be redirected, then the destination URL"),
+    {NULL}
+};
+```
+
+## Fuzzing Functionality
+
+* Send request to aliased (and different resource with aliasMatch)
+* Send request to redirected (and different resource with redirectMatch)
+* Send request to scriptAliased (and different resource with scriptAliased)
