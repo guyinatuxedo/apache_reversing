@@ -21,3 +21,4 @@
 
 * [mod_alias](modules/mod_alias/readme.md)
 * [mod_dir](modules/mod_dir/readme.md)
+* [mod_fastcgi](modules/mod_fastcgi/readme.md)

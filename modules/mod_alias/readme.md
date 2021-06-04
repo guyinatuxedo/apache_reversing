@@ -141,6 +141,8 @@ static const command_rec alias_cmds[] =
 
 ## Fuzzing Functionality
 
+How we can evaluate `mod_dir` via fuzzing (this doesn't cover the entire module, more or less just a basic)
+
 * Send request to aliased (and different resource with aliasMatch)
 * Send request to redirected (and different resource with redirectMatch)
 * Send request to scriptAliased (and different resource with scriptAliased)
