@@ -158,19 +158,30 @@ Looking at this function, it appears that it is starting a process manager. It w
 
 ## fcgi_child_init hook
 
-This hook appears to create handlers to `MBOX/TERM/WAKE` event handlers using `CreateEvent`. It also creates a mutex for `MBOX`, and spawns a process manager thread fpr `fcgi_pm_main`.
+This hook appears to create handlers to `MBOX/TERM/WAKE` event handlers using `CreateEvent`. It also creates a mutex for `MBOX`, and spawns a process manager thread fpr `fcgi_pm_main`. It is a `child_init` hook, that is ran whenever a child process is initialized.
 
 ## content_handler hook
 
-This hook is what processes fastcgi-script requests.
+This hook is what processes fastcgi-script requests. It handles all requests that are not based around authentication. it is a `handler` type hook.
+
+Now the process of how it handles a request, is primarily composed of these parts. First it creates a new FastCGI request from the request it's been given using `create_fcgi_request`. Then it proceeds to service the request with the `do_work` function. Then if the request calls for redirects, it will handle them with the `post_process_for_redirects` function.
 
 ## check_user_authentication hook
 
+So this function is pretty similar to the `content_handler` hook. It handles fastcgi-script requests, that are based around certain types of auth. It is a `check_user_id` type of hook.
+
 ## check_access hook
+
+So this function is pretty similar to the `content_handler` hook. It handles fastcgi-script requests, that are based around certain types of auth. It is a `access_checker` type of hook.
 
 ## check_user_authorization hook
 
+So this function is pretty similar to the `content_handler` hook. It handles fastcgi-script requests, that are based around certain types of auth. It is a `auth_checker` type of hook.
+
 ## fixups hook
+
+So this is a `fixups` style hook. It effectively just checks, does the request have a filename, and is there a server associated with the group and user id of the request. If there is, set the request handler to the request is set to `content_handler` from before.
+
 
 
 
